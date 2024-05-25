@@ -6,19 +6,41 @@ import csvToJson from 'convert-csv-to-json'
 const app = express()
 const port = process.env.PORT ?? 3000
 
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
+
+let userData: Array<Record<string, string>> = []
+
 app.use(cors()) // Enable CORS
 
-app.post('/api/files', async (req, res) => {
+app.post('/api/files', upload.single('file'), async (req, res) => {
   // 1. Extract file from request
+  const { file } = req
   // 2. Validate that we have the file
+  if (!file) {
+    return res.status(400).json({ message: 'File is required' })
+  }
   // 3. Validate mimetype (csv)
-  // 4. Transform the file (buffer) to string
-  // 5. Transform string to CSV
+  if (file.mimetype !== 'text/csv') {
+    return res.status(400).json({ message: 'File must be CSV' })
+  }
+
+  let json: Array<Record<string, string>> = []
+  try {
+    // 4. Transform file (Buffer) to string
+    const rawCsv = Buffer.from(file.buffer).toString('utf-8')
+    console.log(rawCsv)
+    // 5. Transform string (csv) to JSON
+    json = csvToJson.csvStringToJson(rawCsv)
+  } catch (error) {
+    return res.status(500).json({ message: 'Error parsing the file' })
+  }
   // 6. Save the JSON to dv / memory
+      userData = json
   // 7. Return 200 with message and JSON
   return res
     .status(200)
-    .json({ data: [], message: 'File was uploaded successfully' })
+    .json({ data: userData, message: 'File was uploaded successfully' })
 })
 
 app.get('/api/users', async (req, res) => {
