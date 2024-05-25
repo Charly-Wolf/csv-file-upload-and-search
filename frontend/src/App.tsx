@@ -4,6 +4,7 @@ import './App.css'
 import { uploadFile } from './services/upload'
 import { type Data } from './types'
 import { Search } from './steps/Search'
+import { API_HOST } from './config'
 
 const APP_STATUS = {
   IDLE: 'idle', // Right after starting the app
