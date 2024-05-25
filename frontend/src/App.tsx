@@ -3,6 +3,7 @@ import { Toaster, toast } from 'sonner'
 import './App.css'
 import { uploadFile } from './services/upload'
 import { type Data } from './types'
+import { Search } from './steps/Search'
 
 const APP_STATUS = {
   IDLE: 'idle', // Right after starting the app
@@ -59,27 +60,32 @@ function App() {
 
   const showButton =
     appStatus === APP_STATUS.READY_UPLOAD || appStatus === APP_STATUS.UPLOADING
+  const showInput = appStatus !== APP_STATUS.READY_USAGE
 
   return (
     <>
       <Toaster />
       <h4>Upload CSV + Search</h4>
-      <form onSubmit={handleSubmit}>
-        <label>
-          <input
-            disabled={appStatus === APP_STATUS.UPLOADING}
-            onChange={handleInputChange}
-            name='file'
-            type='file'
-            accept='.csv'
-          />
-        </label>
-        {showButton && (
-          <button disabled={appStatus === APP_STATUS.UPLOADING}>
-            {BUTTON_TEXT[appStatus]}
-          </button>
-        )}
-      </form>
+      {showInput && (
+        <form onSubmit={handleSubmit}>
+          <label>
+            <input
+              disabled={appStatus === APP_STATUS.UPLOADING}
+              onChange={handleInputChange}
+              name='file'
+              type='file'
+              accept='.csv'
+            />
+          </label>
+          {showButton && (
+            <button disabled={appStatus === APP_STATUS.UPLOADING}>
+              {BUTTON_TEXT[appStatus]}
+            </button>
+          )}
+        </form>
+      )}
+
+      {appStatus === APP_STATUS.READY_USAGE && <Search initialData={data} />}
     </>
   )
 }
