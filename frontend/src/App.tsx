@@ -4,12 +4,17 @@ import './App.css'
 const APP_STATUS = {
   IDLE: 'idle', // Right after starting the app
   ERROR: 'error', // Error
-  UPLOADING: 'uploading', // When choosing the file
-  READY_UPLOAD: 'uploading', // While uploading the file
+  READY_UPLOAD: 'ready_upload', // When choosing the file
+  UPLOADING: 'uploading', // While uploading the file
   READY_USAGE: 'ready_usage', // After uploading the file
 } as const
 
-type AppStatusType = typeof APP_STATUS[keyof typeof APP_STATUS]
+const BUTTON_TEXT = {
+  [APP_STATUS.READY_UPLOAD]: 'Upload file',
+  [APP_STATUS.UPLOADING]: 'Uploading...',
+}
+
+type AppStatusType = (typeof APP_STATUS)[keyof typeof APP_STATUS]
 
 function App() {
   const [appStatus, setAppStatus] = useState<AppStatusType>(APP_STATUS.IDLE)
@@ -26,8 +31,16 @@ function App() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    console.log('TODO')
+
+    if (appStatus !== APP_STATUS.READY_UPLOAD || !file) {
+      return
+    }
+
+    setAppStatus(APP_STATUS.UPLOADING)
   }
+
+  const showButton =
+    appStatus === APP_STATUS.READY_UPLOAD || appStatus === APP_STATUS.UPLOADING
 
   return (
     <>
@@ -35,18 +48,19 @@ function App() {
       <form onSubmit={handleSubmit}>
         <label>
           <input
+            disabled={appStatus === APP_STATUS.UPLOADING}
             onChange={handleInputChange}
             name='file'
             type='file'
             accept='.csv'
           />
         </label>
+        {showButton && (
+          <button disabled={appStatus === APP_STATUS.UPLOADING}>
+            {BUTTON_TEXT[appStatus]}
+          </button>
+        )}
       </form>
-      {
-        appStatus === APP_STATUS.READY_UPLOAD && (
-        <button>Upload File</button>)
-
-      }
     </>
   )
 }
