@@ -1,33 +1,52 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
+const APP_STATUS = {
+  IDLE: 'idle', // Right after starting the app
+  ERROR: 'error', // Error
+  UPLOADING: 'uploading', // When choosing the file
+  READY_UPLOAD: 'uploading', // While uploading the file
+  READY_USAGE: 'ready_usage', // After uploading the file
+} as const
+
+type AppStatusType = typeof APP_STATUS[keyof typeof APP_STATUS]
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [appStatus, setAppStatus] = useState<AppStatusType>(APP_STATUS.IDLE)
+  const [file, setFile] = useState<File | null>(null)
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const [file] = event.target.files ?? []
+    if (file) {
+      setFile(file)
+      setAppStatus(APP_STATUS.READY_UPLOAD)
+      console.log(file)
+    }
+  }
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    console.log('TODO')
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h4>Upload CSV + Search</h4>
+      <form onSubmit={handleSubmit}>
+        <label>
+          <input
+            onChange={handleInputChange}
+            name='file'
+            type='file'
+            accept='.csv'
+          />
+        </label>
+      </form>
+      {
+        appStatus === APP_STATUS.READY_UPLOAD && (
+        <button>Upload File</button>)
+
+      }
     </>
   )
 }
