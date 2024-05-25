@@ -1,5 +1,8 @@
 import { useState } from 'react'
+import { Toaster, toast } from 'sonner'
 import './App.css'
+import { uploadFile } from './services/upload'
+import { type Data } from './types'
 
 const APP_STATUS = {
   IDLE: 'idle', // Right after starting the app
@@ -18,6 +21,7 @@ type AppStatusType = (typeof APP_STATUS)[keyof typeof APP_STATUS]
 
 function App() {
   const [appStatus, setAppStatus] = useState<AppStatusType>(APP_STATUS.IDLE)
+  const [data, setData] = useState<Data>([])
   const [file, setFile] = useState<File | null>(null)
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +33,7 @@ function App() {
     }
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     if (appStatus !== APP_STATUS.READY_UPLOAD || !file) {
@@ -37,6 +41,20 @@ function App() {
     }
 
     setAppStatus(APP_STATUS.UPLOADING)
+
+    const [err, newData] = await uploadFile(file)
+
+    console.log(newData)
+
+    if (err) {
+      setAppStatus(APP_STATUS.ERROR)
+      toast.error(err.message)
+      return
+    }
+
+    setAppStatus(APP_STATUS.READY_USAGE)
+    if (newData) setData(newData)
+    toast.success('File successfully uploaded')
   }
 
   const showButton =
@@ -44,6 +62,7 @@ function App() {
 
   return (
     <>
+      <Toaster />
       <h4>Upload CSV + Search</h4>
       <form onSubmit={handleSubmit}>
         <label>
