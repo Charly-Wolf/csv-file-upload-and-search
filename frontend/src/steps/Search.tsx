@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 import { type Data } from '../types'
 import { searchData } from '../services/search'
 import { toast } from 'sonner'
+import { useDebounce } from '@uidotdev/usehooks'
+
+const DEBOUNCE_TIME = 500
 
 export const Search = ({ initialData }: { initialData: Data }) => {
   const [data, setData] = useState<Data>(initialData)
@@ -10,24 +13,28 @@ export const Search = ({ initialData }: { initialData: Data }) => {
     const searchParams = new URLSearchParams(window.location.search)
     return searchParams.get('q') ?? ''
   })
+  const debouncedSearch = useDebounce(search, DEBOUNCE_TIME) // Change 'search' value after 500 ms of typing in the input field
+
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value)
   }
 
   useEffect(() => {
     const newPathname =
-      search === '' ? window.location.pathname : `?q=${search}`
+      debouncedSearch === ''
+        ? window.location.pathname
+        : `?q=${debouncedSearch}`
 
     window.history.replaceState({}, '', newPathname)
-  }, [search])
+  }, [debouncedSearch])
 
   useEffect(() => {
-    if (!search) {
+    if (!debouncedSearch) {
       setData(initialData)
       return
     }
     // Call API to filter results
-    searchData(search).then(response => {
+    searchData(debouncedSearch).then(response => {
       const [err, newData] = response
       if (err) {
         toast.error(err.message)
@@ -38,7 +45,7 @@ export const Search = ({ initialData }: { initialData: Data }) => {
         setData(newData)
       }
     })
-  }, [search, initialData])
+  }, [debouncedSearch, initialData])
 
   return (
     <>
