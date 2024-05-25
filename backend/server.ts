@@ -60,11 +60,11 @@ app.get('/api/users', async (req, res) => {
   // 3. Filter the data from the db / memory using the query param
   const search = q.toString().toLowerCase()
 
-  const filteredDate = userData.filter(row => {
+  const filteredData = userData.filter(row => {
     Object.values(row).some(value => value.toLowerCase().includes(search))
   })
   // 4. Return 200 with the filtered data
-  return res.status(200).json({ data: [] })
+  return res.status(200).json({ data: filteredData })
 })
 
 app.listen(port, () => {
