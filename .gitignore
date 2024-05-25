@@ -1,0 +1,28 @@
+# Node.js
+node_modules/
+.pnpm-store/
+
+# Logs
+logs
+*.log
+
+# Dependency directories
+node_modules/
+.pnpm-state.json
+.pnpm-debug.log
+
+# TypeScript
+*.tsbuildinfo
+dist/
+
+# Environment variables
+.env
+.env.*
+
+# IDEs
+.idea/
+.vscode/
+
+# Build outputs
+build/
+dist/
