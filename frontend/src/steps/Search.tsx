@@ -4,7 +4,7 @@ import { searchData } from '../services/search'
 import { toast } from 'sonner'
 import { useDebounce } from '@uidotdev/usehooks'
 
-const DEBOUNCE_TIME = 500
+const DEBOUNCE_TIME = 200
 
 export const Search = ({ initialData }: { initialData: Data }) => {
   const [data, setData] = useState<Data>(initialData)
@@ -13,7 +13,7 @@ export const Search = ({ initialData }: { initialData: Data }) => {
     const searchParams = new URLSearchParams(window.location.search)
     return searchParams.get('q') ?? ''
   })
-  const debouncedSearch = useDebounce(search, DEBOUNCE_TIME) // Change 'search' value after 500 ms of typing in the input field
+  const debouncedSearch = useDebounce(search, DEBOUNCE_TIME) 
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value)
