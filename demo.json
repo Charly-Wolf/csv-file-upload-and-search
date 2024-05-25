@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "Name": "Erik Johansson",
+    "Age": 30,
+    "Department": "Marketing",
+    "Email": "erik.johansson@example.com"
+  },
+  {
+    "id": 2,
+    "Name": "Emma Thompson",
+    "Age": 25,
+    "Department": "Finance",
+    "Email": "emma.thompson@example.com"
+  },
+  {
+    "id": 3,
+    "Name": "Lukas Müller",
+    "Age": 28,
+    "Department": "Human Resources",
+    "Email": "lukas.muller@example.com"
+  },
+  {
+    "id": 4,
+    "Name": "Freya Hansen",
+    "Age": 32,
+    "Department": "Technology",
+    "Email": "freya.hansen@example.com"
+  },
+  {
+    "id": 5,
+    "Name": "Oliver Smith",
+    "Age": 45,
+    "Department": "Sales",
+    "Email": "oliver.smith@example.com"
+  },
+  {
+    "id": 6,
+    "Name": "Sophia Fischer",
+    "Age": 22,
+    "Department": "Customer Service",
+    "Email": "sophia.fischer@example.com"
+  },
+  {
+    "id": 7,
+    "Name": "William Brown",
+    "Age": 27,
+    "Department": "Research",
+    "Email": "william.brown@example.com"
+  },
+  {
+    "id": 8,
+    "Name": "Ida Larsen",
+    "Age": 35,
+    "Department": "Legal",
+    "Email": "ida.larsen@example.com"
+  },
+  {
+    "id": 9,
+    "Name": "James Clark",
+    "Age": 40,
+    "Department": "Operations",
+    "Email": "james.clark@example.com"
+  },
+  {
+    "id": 10,
+    "Name": "Laura Schneider",
+    "Age": 29,
+    "Department": "Logistics",
+    "Email": "laura.schneider@example.com"
+  }
+]

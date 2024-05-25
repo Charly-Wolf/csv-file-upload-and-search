@@ -36,7 +36,7 @@ app.post('/api/files', upload.single('file'), async (req, res) => {
     return res.status(500).json({ message: 'Error parsing the file' })
   }
   // 6. Save the JSON to dv / memory
-      userData = json
+  userData = json
   // 7. Return 200 with message and JSON
   return res
     .status(200)
@@ -45,8 +45,24 @@ app.post('/api/files', upload.single('file'), async (req, res) => {
 
 app.get('/api/users', async (req, res) => {
   // 1. Extract the query param `q` from request
+  const { q } = req.query
   // 2. Validate that we have the query param
+  if (!q) {
+    return res.status(400).json({
+      message: 'Query param `q` is required',
+    })
+  }
+
+  if (Array.isArray(q)) {
+    return res.status(400).json({ message: 'Query param `q` must be a string' })
+  }
+
   // 3. Filter the data from the db / memory using the query param
+  const search = q.toString().toLowerCase()
+
+  const filteredDate = userData.filter(row => {
+    Object.values(row).some(value => value.toLowerCase().includes(search))
+  })
   // 4. Return 200 with the filtered data
   return res.status(200).json({ data: [] })
 })
